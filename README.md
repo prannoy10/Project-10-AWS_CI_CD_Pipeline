@@ -1,8 +1,10 @@
-# AWS Continuous Integration Demo
+# AWS Continuous Integration & Continous Deployment Demo
+
+## Continous Integration
 
 ## Set Up GitHub Repository
 
-We will create CI pipeline. We will use Codepipeline, Codebuild and instead of Codecommit we will use preferred Github which requires additional configuration.
+First We will create CI pipeline. We will use Codepipeline, Codebuild and instead of Codecommit we will use preferred Github which requires additional configuration.
 
 The first step in our CI journey is to set up a GitHub repository to store our Python application's source code. If you already have a repository, feel free to skip this step. Otherwise, let's create a new repository on GitHub by following these steps:
 
@@ -58,3 +60,19 @@ In this final step, we'll trigger the CI process by making a change to our GitHu
 - Head over to the AWS CodePipeline console and navigate to your pipeline.
 - You should see the pipeline automatically kick off as soon as it detects the changes in your repository.
 - Sit back and relax while AWS CodePipeline takes care of the rest. It will fetch the latest code, trigger the build process with AWS CodeBuild, and deploy the application if you configured the deployment stage.
+
+## Continuous Deployment
+
+Now CI part is done using codebuild and codepipeline. The docker image is pushed towards dockerhub as soon as code is commited in Github.
+
+Now we will work on CD part using codedeploy.
+
+- Use ec2 instance as hosting platform to deploy application using docker image present in dockerhub.
+- Install codedeploy agent in ec2 instance
+- Create Role and give permission to ec2 instance to talk to AWS codedeploy while codedeploy will talk to the ec2 instance.
+- After assigning role to ec2 instance, Restart the agent service in ec2 instance
+- Create deployment group by giving information of application details in codedeploy ie source code, how to execute or deploy the application, docker image etc.
+- Codedeploy application will identify the target ec2 instance/environment to deploy application. We have created codedeploy application ie creating folder or registered application. Then created ec2 instance for the application. Finally we integrated both of them.
+- Create deployment in CodeDeploy. Ensure that appspec.yml is present at the root of the repository. The application is now deployed.
+- Continous Delivery process is successful!
+- The final step is to add one more stage to CodePipeline for code-deploy. Now any change in Github code will automatically trigger Codepipeline to perform actions from all their Stages.
